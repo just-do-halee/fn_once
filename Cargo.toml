@@ -1,0 +1,25 @@
+[package]
+name = "fn_once"
+version = "0.1.0"
+edition = "2021"
+categories = [ "development-tools", "rust-patterns" ]
+keywords = [ "once", "function", "derive", "macro" ]
+description = "This library provides a convenient derive macro for a once function."
+homepage = "https://github.com/just-do-halee/fn_once"
+repository = "https://github.com/just-do-halee/fn_once"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+
+exclude = [
+    "RELEASE.md",
+    "release.toml",
+    ".gitignore",
+    ".github/",
+]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+quote = "1"
+syn = { version = "1", features = ["full"] }
