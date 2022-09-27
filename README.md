@@ -35,6 +35,9 @@ fn add_one_once(number: u32) -> u32 {
     count + 1
 }
 
+#[once(panic)]
+fn panic_when_twice() { }
+
 fn main() {
     print_once("World"); // print "Hello! World!"
     print_once("foo"); // no effect
@@ -44,5 +47,8 @@ fn main() {
     number = add_one_once(number); // no effect -> 1
     number = add_one_once(number); // no effect -> 1
     assert_eq!(number, 1);
+
+    panic_when_twice();
+    panic_when_twice(); // panic!
 }
 ```

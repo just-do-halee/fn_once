@@ -6,12 +6,14 @@ pub fn once(attr: TokenStream, item: TokenStream) -> TokenStream {
     let attr = attr.to_string();
 
     let error = |or: &str| {
-        syn::Error::new_spanned(or, "Please use 'or' attribute. ex:) #[once(or = { ... })]")
+        syn::Error::new_spanned(or, "#[once] or #[once(panic)] or #[once(or = { ... })] ")
             .into_compile_error()
     };
 
     let (command, block) = if attr.is_empty() {
         ("or", "{{}}")
+    } else if attr == "panic" {
+        ("panic", "")
     } else {
         match attr.split_once('=') {
             Some((command, block)) => (command.trim(), block.trim()),
@@ -19,7 +21,7 @@ pub fn once(attr: TokenStream, item: TokenStream) -> TokenStream {
         }
     };
 
-    if command.trim() != "or" {
+    if !["or", "panic"].contains(&command.trim()) {
         return error(command).into();
     }
 
@@ -37,12 +39,18 @@ pub fn once(attr: TokenStream, item: TokenStream) -> TokenStream {
             .to_uppercase()
     );
 
+    let returns = if command == "panic" {
+        "panic!(\"The once function has been run twice\");".to_string()
+    } else {
+        format!("return {block};")
+    };
+
     TokenStream::from_str(&format!(
         "
         static {name}: std::sync::Once = std::sync::Once::new();
         {head1} fn {head2} {{
             if {name}.is_completed() {{
-                return {block};
+                {returns}
             }}
             {name}.call_once(|| {{}});
         {body}"
