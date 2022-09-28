@@ -30,7 +30,7 @@ fn print_once(name: &str) {
     println!("Hello! {}!", name);
 }
 
-#[once(or = { number })] // or = { ... }
+#[once(or = { number })] // or = { block expression }
 fn add_one_once(number: u32) -> u32 {
     count + 1
 }
@@ -51,4 +51,15 @@ fn main() {
     panic_when_twice();
     panic_when_twice(); // panic!
 }
+```
+
+## **`When you want to disable it,`**
+
+```toml
+[features]
+default = ["once_off"]
+once_off = []
+
+# The point is that
+# just `once_off` feature is turned on.
 ```

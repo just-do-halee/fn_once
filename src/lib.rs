@@ -46,13 +46,16 @@ pub fn once(attr: TokenStream, item: TokenStream) -> TokenStream {
     };
 
     TokenStream::from_str(&format!(
-        "
+        "#[cfg(not(feature = \"once_off\"))]
         static {name}: std::sync::Once = std::sync::Once::new();
         {head1} fn {head2} {{
-            if {name}.is_completed() {{
-                {returns}
+            #[cfg(not(feature = \"once_off\"))]
+            {{
+                if {name}.is_completed() {{
+                    {returns}
+                }}
+                {name}.call_once(|| {{}});
             }}
-            {name}.call_once(|| {{}});
         {body}"
     ))
     .unwrap()
