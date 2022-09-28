@@ -17,7 +17,7 @@ This library provides a convenient derive macro for a once function.
 [license-url]: https://github.com/just-do-halee/fn_once
 
 ```toml
-fn_once = "0.2.0"
+fn_once = "0.3.0"
 ```
 
 ## **`How to use,`**
